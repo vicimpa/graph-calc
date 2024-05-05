@@ -5,6 +5,7 @@ import { useSignal, useSignalEffect } from "@preact/signals-react";
 import { TFunction } from "./Functions";
 import rsp from "@vicimpa/rsp";
 import s from "./FunctionItem.module.sass";
+import { useId } from "react";
 
 export type FunctionItemProps = {
   onDelete?: () => void;
@@ -20,7 +21,7 @@ export const FunctionItem = (
     onDelete
   }: FunctionItemProps
 ) => {
-  const saved = useSignal(true);
+  const _id = useId();
   const cFunc = useSignal(`return v`);
   const error = useSignal('');
   const keys = [...Object.keys(math)];
@@ -33,7 +34,6 @@ export const FunctionItem = (
       cFunc.value
     );
 
-
     try {
       const r = f(...values, 1);
 
@@ -41,15 +41,10 @@ export const FunctionItem = (
         throw new Error('No return number');
 
       func.value = f.bind(null, ...values);
-      saved.value = true;
       error.value = ``;
     } catch (e) {
       error.value = `${e}`;
     }
-
-    return () => {
-      saved.value = false;
-    };
   });
 
   return (
@@ -75,9 +70,12 @@ export const FunctionItem = (
         Func <br />
         <pre>
           {`(v: number) => \{\n`}
-          <rsp.textarea bind-value={cFunc} />
+          <rsp.textarea autoComplete="on" bind-value={cFunc} />
           {`}`}
         </pre>
+        <datalist id={_id}>
+          {keys.map((key) => <option key={key} value={key} />)}
+        </datalist>
       </label>
       <rsp.p className={s.error}>{error}</rsp.p>
     </div>
