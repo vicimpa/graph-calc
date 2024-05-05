@@ -79,7 +79,7 @@ export class Functions extends Component<PropsWithChildren> {
           <div className={s.head}>
             <a href="https://github.com/vicimpa/graph-calc">GitHub</a>
             <label>
-              Loop
+              {'Loop '}
               <rsp.input type="checkbox" bind-checked={this.loop} />
             </label>
           </div>
