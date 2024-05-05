@@ -37,7 +37,7 @@ export class Canvas extends Component<PropsWithChildren> {
 
   x = signal(0);
   y = signal(0);
-  s = signal(1);
+  s = signal(10);
 
   size = signal(new Vec2());
   show = computeShow(this);
@@ -45,10 +45,8 @@ export class Canvas extends Component<PropsWithChildren> {
   @inject(provider(Functions))
   functions!: Functions;
 
-  toScale(scale: number) {
-    const mouse = this.mouse.peek();
+  toScale(scale: number, mouse = this.mouse.peek()) {
     const size = this.size.peek().cdiv(2);
-
     const start = mouse
       .cminus(size)
       .minus(this.x, this.y)

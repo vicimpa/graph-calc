@@ -1,8 +1,7 @@
-import { max, min, precision } from "@/library/math";
-
 import { Canvas } from "../Canvas";
 import { Vec2 } from "@/library/vec2";
 import { composeEffect } from "@/library/signals";
+import { precision } from "@/library/math";
 
 export default (c: Canvas) => (
   composeEffect([c.can, c.ctx], (can, ctx) => {
@@ -17,7 +16,10 @@ export default (c: Canvas) => (
     const s = c.s.value;
     const aX = dX / s;
     const aY = dY / s;
-    const size = max(10, precision(min(X, Y) / 5, 10));
+    var size = 10;
+
+    while (size * s < 100)
+      size *= 2;
 
     const center = new Vec2(c.size.value)
       .times(.5)
@@ -41,6 +43,25 @@ export default (c: Canvas) => (
       }
 
       for (let y = precision(-Y - aY - size, size); y <= Y - aY; y += size) {
+        ctx.moveTo(-X - aX, y);
+        ctx.lineTo(X - aX, y);
+      }
+
+      ctx.lineWidth = 2 / s;
+      ctx.stroke();
+    }
+    ctx.closePath();
+
+    // Grid 2
+    ctx.strokeStyle = '#333';
+    ctx.beginPath();
+    {
+      for (let x = precision(-X - aX - size, size); x <= X - aX; x += size / 4) {
+        ctx.moveTo(x, -Y - aY);
+        ctx.lineTo(x, Y - aY);
+      }
+
+      for (let y = precision(-Y - aY - size, size); y <= Y - aY; y += size / 4) {
         ctx.moveTo(-X - aX, y);
         ctx.lineTo(X - aX, y);
       }
@@ -84,6 +105,11 @@ export default (c: Canvas) => (
         if (y / 10 | 0)
           ctx.fillText(` ${-y / 10 | 0} `, 0, y);
       }
+
+
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(` 0 `, 0, 0);
     }
 
     // Functions

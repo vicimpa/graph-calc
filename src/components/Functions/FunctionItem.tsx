@@ -21,54 +21,44 @@ export const FunctionItem = (
   }: FunctionItemProps
 ) => {
   const saved = useSignal(true);
-  const cType = useSignal(type.peek());
-  const cColor = useSignal(color.peek());
   const cFunc = useSignal(`return v`);
   const error = useSignal('');
+  const keys = [...Object.keys(math)];
+  const values = [...Object.values(math)];
 
   useSignalEffect(() => {
-    cType.value;
-    cColor.value;
-    cFunc.value;
-    error.value = '';
-
-    return () => {
-      saved.value = false;
-    };
-  });
-
-  function save() {
-    const keys = [...Object.keys(math)];
-    const values = [...Object.values(math)];
-
     const f = new Function(
       ...keys,
       'v',
       cFunc.value
     );
 
+
     try {
       const r = f(...values, 1);
-      if (typeof r !== 'number') {
+
+      if (typeof r !== 'number')
         throw new Error('No return number');
-      }
 
       func.value = f.bind(null, ...values);
-      type.value = cType.value;
-      color.value = cColor.value;
       saved.value = true;
+      error.value = ``;
     } catch (e) {
       error.value = `${e}`;
     }
-  }
+
+    return () => {
+      saved.value = false;
+    };
+  });
 
   return (
     <div className={s.item}>
+      <p>#{id}</p>
       <div className={s.head}>
-        <label>#{id}</label>
         <label>
           Type<br />
-          <rsp.select bind-value={cType} onChange={console.log}>
+          <rsp.select bind-value={type} onChange={console.log}>
             <option value="x">x</option>
             <option value="y">y</option>
           </rsp.select>
@@ -76,8 +66,9 @@ export const FunctionItem = (
 
         <label>
           Color <br />
-          <rsp.input type="color" bind-value={cColor} />
+          <rsp.input type="color" bind-value={color} />
         </label>
+        <button onClick={onDelete}>Delete</button>
       </div>
 
       <label>
@@ -88,9 +79,7 @@ export const FunctionItem = (
           {`}`}
         </pre>
       </label>
-      <rsp.button disabled={saved} onClick={save}>Save</rsp.button>
-      <button onClick={onDelete}>Delete</button>
-      <rsp.pre data-error={error}>{error}</rsp.pre>
+      <rsp.p className={s.error}>{error}</rsp.p>
     </div>
   );
 };
