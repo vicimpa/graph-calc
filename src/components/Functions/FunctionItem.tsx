@@ -1,11 +1,12 @@
 import * as math from "@/library/math";
 
+import { Functions, TFunction } from "./Functions";
 import { useSignal, useSignalEffect } from "@preact/signals-react";
 
-import { TFunction } from "./Functions";
 import rsp from "@vicimpa/rsp";
 import s from "./FunctionItem.module.sass";
 import { useId } from "react";
+import { useProvide } from "@/library/provide";
 
 export type FunctionItemProps = {
   onDelete?: () => void;
@@ -20,6 +21,7 @@ export const FunctionItem = (
     onDelete
   }: FunctionItemProps
 ) => {
+  const { params } = useProvide(Functions);
   const _id = useId();
   const cFunc = useSignal('return v');
   const error = useSignal('');
@@ -30,13 +32,13 @@ export const FunctionItem = (
     const f = new Function(
       ...keys,
       'v',
+      'p',
+      't',
       cFunc.value
     );
 
-    console.log(f.toString());
-
     try {
-      const r = f(...values, 1);
+      const r = f(...values, 1, params, performance.now());
 
       if (typeof r !== 'number')
         throw new Error('No return number');
@@ -50,27 +52,27 @@ export const FunctionItem = (
 
   return (
     <div className={s.item}>
-      <p>#{id}</p>
       <div className={s.head}>
-        <label>
-          Type<br />
-          <rsp.select bind-value={type} onChange={console.log}>
-            <option value="x">x</option>
-            <option value="y">y</option>
-          </rsp.select>
-        </label>
-
-        <label>
-          Color <br />
-          <rsp.input type="color" bind-value={color} />
-        </label>
+        <p>#{id}</p>
         <button onClick={onDelete}>Delete</button>
       </div>
+      <label>
+        Type<br />
+        <rsp.select bind-value={type} onChange={console.log}>
+          <option value="x">x</option>
+          <option value="y">y</option>
+        </rsp.select>
+      </label>
+
+      <label>
+        Color <br />
+        <rsp.input type="color" bind-value={color} />
+      </label>
 
       <label>
         Func <br />
         <pre>
-          {`(v: number) => \{\n`}
+          {`(v: number, p: Params, t: number) => \{\n`}
           <rsp.textarea autoComplete="on" bind-value={cFunc} />
           {`}`}
         </pre>
