@@ -9,6 +9,7 @@ import computeCtx from "./calc/computeCtx";
 import computeShow from "./calc/computeShow";
 import detectDrag from "./plugins/detectDrag";
 import detectDraw from "./plugins/detectDraw";
+import detectMouse from "./plugins/detectMouse";
 import detectResize from "./plugins/detectResize";
 import detectWheel from "./plugins/detectWheel";
 import s from "./Canvas.module.sass";
@@ -25,11 +26,14 @@ export type TFunction = {
   detectResize,
   detectDraw,
   detectWheel,
-  detectDrag
+  detectDrag,
+  detectMouse,
 )
 export class Canvas extends Component<PropsWithChildren> {
   can = signalRef<HTMLCanvasElement>();
   ctx = computeCtx(this);
+
+  mouse = signal(new Vec2());
 
   x = signal(0);
   y = signal(0);
@@ -40,6 +44,28 @@ export class Canvas extends Component<PropsWithChildren> {
 
   @inject(provider(Functions))
   functions!: Functions;
+
+  toScale(scale: number) {
+    const mouse = this.mouse.peek();
+    const size = this.size.peek().cdiv(2);
+
+    const start = mouse
+      .cminus(size)
+      .minus(this.x, this.y)
+      .cdiv(this.s);
+
+    this.s.value = scale;
+
+    mouse
+      .cminus(size)
+      .minus(this.x, this.y)
+      .cdiv(this.s)
+      .minus(start)
+      .times(this.s)
+      .plus(this.x, this.y)
+      .toSignals(this.x, this.y);
+
+  }
 
   render() {
     return (
