@@ -1,4 +1,5 @@
 import { Canvas } from "../Canvas";
+import { Dispose } from "@/utils/dispose";
 import { Vec2 } from "@/library/vec2";
 import { composeEffect } from "@/library/signals";
 import { looper } from "@/library/looper";
@@ -29,7 +30,7 @@ export default (c: Canvas) => (
     can.width = width;
     can.height = height;
     c.functions.loop.value;
-    const dispose = looper((t) => {
+    const dispose: Dispose = looper((t) => {
       // Camera
       ctx.resetTransform();
       ctx.fillStyle = '#222';
@@ -149,7 +150,7 @@ export default (c: Canvas) => (
           }
         }
         if (!c.functions.loop.value) {
-          return dispose();
+          return dispose?.();
         }
       }
     });

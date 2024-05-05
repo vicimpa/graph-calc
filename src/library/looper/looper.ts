@@ -1,3 +1,5 @@
+import { Dispose } from "@/utils/dispose";
+
 export type LoopFunction<T = any> = (time: number, deltaTime: number) => T;
 
 var LOOPS = new Set<LoopFunction>();
@@ -23,7 +25,7 @@ export const execute = <T extends LoopFunction>(loop: T): ReturnType<T> => {
   return loop(time, deltaTime);
 };
 
-export const looper = <T extends LoopFunction>(loop: T, skip?: number) => {
+export const looper = <T extends LoopFunction>(loop: T, skip?: number): Dispose => {
   var i = skip ?? 0;
   const skipLoop = skip ? ((...args) => {
     if ((i++) > skip) {
