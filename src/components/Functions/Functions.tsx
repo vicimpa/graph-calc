@@ -39,6 +39,7 @@ export class Functions extends Component<PropsWithChildren> {
     return (
       <div className={s.func}>
         <div className={s.sidebar}>
+          <a href="https://github.com/vicimpa/graph-calc">GitHub</a>
           {this.functionItems}
           <button
             onClick={() => {
