@@ -15,10 +15,24 @@ export type TFunction = {
   func: Signal<(v: number) => number>;
 };
 
+export const makeFunc = (
+  type: 'x' | 'y',
+  color: string,
+  func: (v: number) => number
+) => {
+  return {
+    id: id++,
+    type: signal(type),
+    color: signal(color),
+    func: signal(func)
+  };
+};
+
 @provide()
 @connect()
 export class Functions extends Component<PropsWithChildren> {
   functions = signal([] as TFunction[]);
+
   functionItems = computeFunctions(this);
 
   render(): ReactNode {
@@ -30,12 +44,7 @@ export class Functions extends Component<PropsWithChildren> {
             onClick={() => {
               this.functions.value = [
                 ...this.functions.peek(),
-                {
-                  id: id++,
-                  type: signal('x'),
-                  color: signal('#666'),
-                  func: signal((v) => v)
-                }
+                makeFunc('x', '#999', function (v) { return v; })
               ];
             }}
           >

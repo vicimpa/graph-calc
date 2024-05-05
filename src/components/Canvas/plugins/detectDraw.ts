@@ -30,7 +30,8 @@ export default (c: Canvas) => (
 
     // Camera
     ctx.resetTransform();
-    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#222';
+    ctx.fillRect(0, 0, width, height);
     ctx.setTransform(s, 0, 0, s, ...center.tuple);
 
     // Grid

@@ -11,7 +11,6 @@ export type FunctionItemProps = {
   onDelete?: () => void;
 } & TFunction;
 
-
 export const FunctionItem = (
   {
     id,
@@ -22,7 +21,7 @@ export const FunctionItem = (
   }: FunctionItemProps
 ) => {
   const _id = useId();
-  const cFunc = useSignal(`return v`);
+  const cFunc = useSignal('return v');
   const error = useSignal('');
   const keys = [...Object.keys(math)];
   const values = [...Object.values(math)];
@@ -33,6 +32,8 @@ export const FunctionItem = (
       'v',
       cFunc.value
     );
+
+    console.log(f.toString());
 
     try {
       const r = f(...values, 1);
