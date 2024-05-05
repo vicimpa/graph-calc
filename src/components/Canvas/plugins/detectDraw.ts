@@ -30,6 +30,14 @@ export default (c: Canvas) => (
     can.width = width;
     can.height = height;
     c.functions.loop.value;
+
+
+    for (const f of c.functions.functions.value) {
+      f.func.value;
+      f.color.value;
+      f.type.value;
+    }
+
     const dispose: Dispose = looper((t) => {
       // Camera
       ctx.resetTransform();
