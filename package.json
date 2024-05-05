@@ -1,0 +1,26 @@
+{
+  "name": "graph-calc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@preact/signals-react": "^2.0.1",
+    "@vicimpa/rsp": "^0.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "sass": "^1.76.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0",
+    "vite-tsconfig-paths": "^4.3.2"
+  }
+}
