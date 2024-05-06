@@ -1,9 +1,10 @@
+import { minMax, precision } from "@/library/math";
+
 import { Canvas } from "../Canvas";
 import { Dispose } from "@/utils/dispose";
 import { Vec2 } from "@/library/vec2";
 import { composeEffect } from "@/library/signals";
 import { looper } from "@/library/looper";
-import { precision } from "@/library/math";
 
 export default (c: Canvas) => (
   composeEffect([c.can, c.ctx], (can, ctx) => {
@@ -106,16 +107,22 @@ export default (c: Canvas) => (
         ctx.textBaseline = 'bottom';
 
         for (let x = precision(-X - aX - size, size); x <= X - aX; x += size) {
-          if (x / 10 | 0)
-            ctx.fillText(` ${x / 10 | 0} `, x, 0);
+          if (x / 10 | 0) {
+            const text = ` ${x / 10 | 0} `;
+            const { hangingBaseline } = ctx.measureText(text);
+            ctx.fillText(text, x, minMax(0, -Y - aY + hangingBaseline, Y - aY));
+          }
         }
 
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
 
         for (let y = precision(-Y - aY - size, size); y <= Y - aY; y += size) {
-          if (y / 10 | 0)
-            ctx.fillText(` ${-y / 10 | 0} `, 0, y);
+          if (y / 10 | 0) {
+            const text = ` ${-y / 10 | 0} `;
+            const { width } = ctx.measureText(text);
+            ctx.fillText(text, minMax(0, -X - aX, X - aX - width), y);
+          };
         }
 
 
