@@ -29,15 +29,15 @@ export const FunctionItem = (
   const values = [...Object.values(math)];
 
   useSignalEffect(() => {
-    const f = new Function(
-      ...keys,
-      'v',
-      'p',
-      't',
-      cFunc.value
-    );
-
     try {
+      const f = new Function(
+        ...keys,
+        'v',
+        'p',
+        't',
+        cFunc.value
+      );
+
       const r = f(...values, 1, params, performance.now());
 
       if (typeof r !== 'number')
