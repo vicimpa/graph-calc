@@ -157,9 +157,10 @@ export default (c: Canvas) => (
             ctx.closePath();
           }
         }
-        if (!c.functions.loop.value) {
-          return dispose?.();
-        }
+      }
+
+      if (!c.functions.loop.value) {
+        return dispose?.();
       }
     });
 
